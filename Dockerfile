@@ -4,10 +4,11 @@ WORKDIR /code
 
 COPY ./requirements.txt /code/requirements.txt 
 
-COPY ./templates /code/templates
-
-COPY ./app.py /code/app.py 
-
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
-CMD ["fastapi", "run", "app:app.py", "--port", "7860"]
+COPY ./templates /code/templates
+COPY ./urls.csv /code/urls.csv 
+COPY ./youtube_urls.csv /code/youtube_urls.csv
+COPY ./app.py /code/app.py 
+
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "7860"]
