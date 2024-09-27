@@ -21,7 +21,7 @@ app.add_middleware(
 templates = Jinja2Templates(directory="templates")
 CSV_FILE = "urls.csv"
 YOUTUBE_CSV_FILE = "youtube_urls.csv"
-REDIRECT_URL_NOT_AUTHENTICATED = "https://www.example.com/not-authenticated"  # Redirect URL for unauthenticated users
+
 
 class URLBase:
     original_url: str
@@ -109,6 +109,7 @@ async def redirect_to_feedback(short_url: str, request: Request):
 
 @app.post("/submit_feedback/")
 async def submit_feedback(
+    request:Request,
     short_url: str = Form(...), 
     feedback: str = Form(...), 
     name: str = Form(...), 
@@ -118,5 +119,11 @@ async def submit_feedback(
     for url in urls:
         if url['short_url'] == short_url:
             if name == url['name'] and dob == url['dob']:
-                return RedirectResponse(url=url['original_url'])
-    return RedirectResponse(url=random_read_youtube_urls())
+                return templates.TemplateResponse("redirect.html", {
+                    "request": request,
+                    "original_url": url['original_url'], 
+                })
+    return templates.TemplateResponse("redirect.html", {
+                    "request": request,
+                    "original_url":random_read_youtube_urls() ,  
+                })
