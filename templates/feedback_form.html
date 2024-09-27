@@ -1,28 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Feedback Form</title>
-</head>
-<body>
-    <h1>Please Provide Feedback</h1>
-    <form action="/submit_feedback/" method="post">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      body {
+        align-items: center;
+        background-color: #fff;
+        display: flex;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        font-family: sans-serif;
+      }
+
+      .form {
+        background-color: #15172b;
+        border-radius: 20px;
+        padding: 20px;
+        width: 400px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .title {
+        color: #eee;
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      label {
+        color: #eee;
+        display: block;
+        margin-bottom: 10px;
+        font-size: 16px;
+      }
+
+      input,
+      textarea {
+        background-color: #303245;
+        border-radius: 12px;
+        border: none;
+        color: #eee;
+        font-size: 16px;
+        padding: 10px;
+        width: calc(100% - 22px);
+        margin-bottom: 20px;
+      }
+
+      input[type="text"],
+      input[type="date"] {
+        height: 40px;
+      }
+
+      textarea {
+        height: 80px;
+        resize: none;
+      }
+
+      .submit {
+        background-color: #08d;
+        border-radius: 12px;
+        border: none;
+        color: #eee;
+        cursor: pointer;
+        font-size: 18px;
+        height: 50px;
+        text-align: center;
+        width: 100%;
+      }
+
+      .submit:active {
+        background-color: #06b;
+      }
+
+      .submit:hover {
+        background-color: #07c;
+      }
+
+      /* star */
+      p {
+        color: #eee;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .star-rating {
+        white-space: nowrap;
+      }
+      .star-rating [type="radio"] {
+        appearance: none;
+      }
+      .star-rating i {
+        font-size: 1.5em;
+        transition: 0.3s;
+        cursor: pointer;
+      }
+
+      .star-rating i.selected {
+        color: #faec1b;
+        text-shadow: 0 0 2px #ffffff, 0 0 10px #ffee58;
+      }
+
+      .star-rating i:hover,
+      .star-rating i:hover ~ i {
+        color: #fffdba;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="form">
+      <h1 class="title">We Value Your Feedback</h1>
+      <p class="subtitle">
+        Please take a moment to provide your feedback. Your input helps us
+        improve our services!
+      </p>
+      <form id="feedback-form" action="/submit_feedback/" method="post">
+
         <input type="hidden" name="short_url" value="{{ short_url }}">
-        
         <label for="name">Your Name:</label>
-        <input type="text" name="name" id="name" required>
-        <br>
+        <input type="text" name="name" id="name" required />
 
         <label for="dob">Date of Birth:</label>
-        <input type="date" name="dob" id="dob" required>
-        <br>
+        <input type="date" name="dob" id="dob" required />
 
         <label for="feedback">Your Feedback:</label>
         <textarea name="feedback" id="feedback" required></textarea>
-        <br>
 
-        <button type="submit">Submit</button>
-    </form>
-</body>
+        <p>
+          Rating:
+          <span class="star-rating">
+            <i class="fa-solid fa-star" data-value="1"></i>
+            <i class="fa-solid fa-star" data-value="2"></i>
+            <i class="fa-solid fa-star" data-value="3"></i>
+            <i class="fa-solid fa-star" data-value="4"></i>
+            <i class="fa-solid fa-star" data-value="5"></i>
+          </span>
+        </p>
+        <input type="hidden" name="rating" id="rating" value="2" />
+
+        <button type="submit" class="submit">Submit</button>
+      </form>
+    </div>
+
+    <script>
+      const stars = document.querySelectorAll(".star-rating i");
+      const ratingInput = document.getElementById("rating");
+
+      stars.forEach((star, index) => {
+        star.addEventListener("click", () => {
+          ratingInput.value = star.dataset.value;
+          stars.forEach((s, i) => {
+            if (i <= index) {
+              s.classList.add("selected");
+            } else {
+              s.classList.remove("selected");
+            }
+          });
+        });
+      });
+    </script>
+  </body>
 </html>
